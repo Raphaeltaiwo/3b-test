@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test</title>
+    </head>
+    <body>
+        <div class="quiz-box">
+           <h1>Web-based Quiz</h1>
+           <div id="question-box">
+            <p id="question-texts"></p>
+            <div id="button-answer" class="button-container"></div>
+           </div>
+
+           <button id="next" class="button-next" onclick="nextQuestion()">Next</button>
+           <div id="result-container" class="hidden-result">
+            <p id="result-text"></p>
+           </div>
+        </div>
+
+        <script>
+            const questions = [
+                {
+                    question: "Who is the president of Nigeria?",
+                    answers: [
+                        {text: "Bola Ahmed Tinubu", correct: true},
+                        {text: "Donald Trump", correct: false},
+                        {text: "Michael Jackson", correct: false}
+                    ]
+                },
+
+                {
+                    question: "What planet do you live in?",
+                    answers: [
+                        {text: "Pluto", correct: false},
+                        {text: "Earth", correct: true},
+                        {text: "Saturn", correct: false}
+                    ]
+                },
+
+                {
+                    
+                    question: "What is the colour of the Nigerian flag?",
+                    answers: [
+                        {text: "Orange Green Orange", correct: false},
+                        {text: "White Green White", correct: false},
+                        {text: "Green White Green", correct: true}
+                    ]
+                },
+
+                {
+                    question: "Which is the greatest EPL team of all time?",
+                    answers: [
+                        {text: "Chelsea", correct: false},
+                        {text: "Manchester United", correct: true},
+                        {text: "Arsenal", correct: false}
+                    ]
+                }
+
+
+            ];
+
+            let presentQuestionIndex = 0;
+            let score = 0;
+
+            const questionText = document.getElementById ('question-texts');
+            const answerButtons = document.getElementById ('button-answer');
+            const nextButton = document.getElementById ('next');
+            const resultContainer = document.getElementById ('result-container');
+            const resultText = document.getElementById ('result-text');
+
+            function beginQuiz() {
+                presentQuestionIndex = 0;
+                score = 0;
+                next.classList.add ('hidden');
+                resultContainer.classList.add ('hidden');
+                showQuestion(questions[presentQuestionIndex]);
+            } 
+
+            function showQuestion (question) {
+                questionText.innerText = question.question;
+                resetAnswerButtons();
+                question.answers.forEach(answer => {
+                    const button = document.createElement('button');
+                    button.addEventListener ('click', () => selectAnswer (answer));
+                    answerButtons.appendChild(button);
+                });
+            }
+
+            function resetAnswerButtons() {
+            while (answerButtons.firstChild) {
+                answerButtons.removeChild(answerButtons.firstChild);
+            }
+        }
+
+        function selectAnswer(answer) {
+            const correct = answer.correct;
+            if (correct) {
+                score++;
+            }
+            nextButton.classList.remove('hidden');
+            answerButtons.querySelectorAll('.btn').forEach(button => {
+                button.disabled = true;
+            });
+        }
+
+        function nextQuestion() {
+            presentQuestionIndex++;
+            if (presentQuestionIndex < questions.length) {
+                showQuestion(questions[presentQuestionIndex]);
+                nextButton.classList.add('hidden');
+                answerButtons.querySelectorAll('.button-next').forEach(button => {
+                    button.disabled = false;
+                });
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            resultText.innerText = `You scored ${score} out of ${questions.length} questions`;
+            resultContainer.classList.remove('hidden');
+        }
+
+        beginQuiz();
+
+        </script>
+        
+    </body>
+</html>
